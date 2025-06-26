@@ -7,6 +7,10 @@ const description = "Astro and Supabase demo app";
 const { title } = Astro.props;
 const ogImageURL = new URL("hero.png", Astro.site).href;
 const canonicalURL = new URL(Astro.url).href;
+
+const { cookies } = Astro;
+const accessToken = cookies.get("sb-access-token");
+const refreshToken = cookies.get("sb-refresh-token");
 ---
 
 <html lang="en" class="h-full w-full">
@@ -38,22 +42,47 @@ const canonicalURL = new URL(Astro.url).href;
         >
         <div>
           <ul class="font-medium flex items-baseline gap-8">
-            <li>
-              <a
-                href="/dashboard"
-                class="block text-zinc-900 dark:text-gray-200">Dashboard</a
-              >
-            </li>
-            <li>
-              <a href="/register" class="block text-zinc-900 dark:text-gray-200"
-                >Register</a
-              >
-            </li>
-            <li>
-              <a href="/signin" class="block text-zinc-900 dark:text-gray-200"
-                >Sign in</a
-              >
-            </li>
+            {
+              accessToken && refreshToken ? (
+                <>
+                  <li>
+                    <a
+                      href="/dashboard"
+                      class="block text-zinc-900 dark:text-gray-200"
+                    >
+                      Dashboard
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/api/auth/signout"
+                      class="block text-zinc-900 dark:text-gray-200"
+                    >
+                      Logout
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <a
+                      href="/register"
+                      class="block text-zinc-900 dark:text-gray-200"
+                    >
+                      Register
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/signin"
+                      class="block text-zinc-900 dark:text-gray-200"
+                    >
+                      Sign in
+                    </a>
+                  </li>
+                </>
+              )
+            }
           </ul>
         </div>
       </div>
